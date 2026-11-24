@@ -1,0 +1,14 @@
+{
+  "simulation_name": "Office_Building_Morning_Rush",
+  "algorithm": "SCAN",
+  "execution_mode": "LOCAL",
+  "total_requests": 60,
+  "completed_requests": 60,
+  "total_journey_time_sec": 1101.95,
+  "avg_journey_time_sec": 18.37,
+  "avg_hall_wait_time_sec": 3.53,
+  "max_hall_wait_time_sec": 8.85,
+  "total_elevator_stops": 111,
+  "overload_events": 0,
+  "avg_dispatch_latency_ms": 0.018
+}

@@ -1,0 +1,14 @@
+{
+  "simulation_name": "Office_Building_Morning_Rush",
+  "algorithm": "MC_DDI",
+  "execution_mode": "LOCAL",
+  "total_requests": 100,
+  "completed_requests": 100,
+  "total_journey_time_sec": 1934.48,
+  "avg_journey_time_sec": 19.34,
+  "avg_hall_wait_time_sec": 5.83,
+  "max_hall_wait_time_sec": 20.27,
+  "total_elevator_stops": 180,
+  "overload_events": 0,
+  "avg_dispatch_latency_ms": 0.032
+}
