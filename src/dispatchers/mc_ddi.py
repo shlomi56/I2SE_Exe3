@@ -37,10 +37,22 @@ class MarginalCostDDDispatcher(IDispatcher):
         fleet_snapshots: List[SensorSnapshot],
         active_assignments: Dict[int, ElevatorAssignment],
     ) -> AllocationDecision:
-        t_start = time.perf_counter()
+        self.record_call(request, fleet_snapshots)
+        return self.compute_allocation(request, fleet_snapshots, active_assignments)
+
+    def record_call(self, request: Request, fleet_snapshots: List[SensorSnapshot]) -> None:
+        """Feed the idle-parking demand window (host-side state; never affects allocation)."""
         now = max((s.timestamp for s in fleet_snapshots), default=request.timestamp)
         self._recent_calls.append((now, request.src_floor))
 
+    def compute_allocation(
+        self,
+        request: Request,
+        fleet_snapshots: List[SensorSnapshot],
+        active_assignments: Dict[int, ElevatorAssignment],
+    ) -> AllocationDecision:
+        """The pure MC-DDI decision — exactly what the ESP32 ``EdgeAllocator`` reproduces."""
+        t_start = time.perf_counter()
         best_key: Optional[Tuple[float, int, float, int]] = None
         best: Optional[Tuple[int, List[int], float]] = None
 
