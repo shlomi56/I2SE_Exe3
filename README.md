@@ -65,8 +65,7 @@ smart-elevator-system-EX3/
 │                        # WirelessServer, EdgeNode, main.py, plus README.md (flashing guide)
 ├── data/                # requests.csv (full day) + requests_{up_peak,midday,down_peak}.csv
 ├── outputs/
-│   ├── benchmarks/      # benchmark_results.{md,json} + <scenario>/<ALGO>/simulation_{output.csv,summary.json}
-│   └── phase4_benchmark.md    # exact numbers written by the benchmark regression tests
+│   └── benchmarks/      # benchmark_results.{md,json} + <scenario>/<ALGO>/simulation_{output.csv,summary.json}
 └── tests/               # pytest suite: unit, integration, benchmark, GUI, ESP32 bridge (+ opt-in HIL)
 ```
 
