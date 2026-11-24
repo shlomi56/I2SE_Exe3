@@ -1,0 +1,18 @@
+[theme]
+base = "light"
+primaryColor = "#4f46e5"
+backgroundColor = "#f6f7fb"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#111827"
+borderColor = "#e5e7eb"
+showWidgetBorder = true
+baseRadius = "medium"
+font = "sans-serif"
+chartCategoricalColors = ["#2a78d6", "#eb6834", "#1baf7a"]
+
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true
+runOnSave = false

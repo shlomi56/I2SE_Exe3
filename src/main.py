@@ -1,7 +1,7 @@
 """Simulator entry point.
 
     python -m src.main --config simulation_config.json --requests data/requests.csv --algorithm MC_DDI \
-        [--output-dir outputs]
+        [--output-dir outputs] [--gui]
 """
 from __future__ import annotations
 
@@ -22,7 +22,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--requests", help="Request CSV (3- or 4-column). Generated from the config if omitted.")
     parser.add_argument("--algorithm", choices=sorted(LOCAL_DISPATCHERS), help="Overrides dispatcher.algorithm")
     parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument("--gui", action="store_true", help="Open the Streamlit dashboard instead of a headless run")
     args = parser.parse_args(argv)
+
+    if args.gui:  # the GUI is launched as a separate process; the core never imports it
+        import subprocess
+        from pathlib import Path
+
+        app = Path(__file__).resolve().parent / "gui" / "app.py"
+        return subprocess.call([sys.executable, "-m", "streamlit", "run", str(app), "--", "--config", args.config])
 
     try:
         config = load_config(args.config)
