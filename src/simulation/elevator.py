@@ -22,12 +22,12 @@ heads for it.
 """
 from __future__ import annotations
 
-import math
 import random
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional
 
 from src.models.dto import ElevatorConfig, Request, SensorSnapshot, StopRecord
 from src.models.enums import Direction, ElevatorState, RequestStatus
+from src.models.route_semantics import braking_floor, plan_route
 from src.simulation.sensors import SensorSuite
 
 TIME_EPS = 1e-9
@@ -158,9 +158,8 @@ class Elevator:
     def get_braking_floor(self) -> int:
         """Nearest floor at which the car can still stop (point of no return)."""
         if self.state in (ElevatorState.ACCELERATING, ElevatorState.CRUISING):
-            if self.direction == Direction.UP:
-                return min(self.max_floor, math.floor(self.position + POS_EPS) + 1)
-            return max(self.min_floor, math.ceil(self.position - POS_EPS) - 1)
+            signed = 1.0 if self.direction == Direction.UP else -1.0
+            return min(self.max_floor, max(self.min_floor, braking_floor(self.position, signed)))
         if self.state == ElevatorState.DECELERATING and self._leg_target is not None:
             return self._leg_target
         return self.current_floor
@@ -413,28 +412,15 @@ class Elevator:
     def _repair_queue(self) -> None:
         """Guarantee every active request is still served by ``stop_queue`` and drop stops serving nobody.
 
-        Uses the shared route semantics (board at first ``src`` stop, alight at first ``target`` stop after
-        boarding). Missing stops are appended at the tail; unused stops (e.g. left behind by a bumped
-        passenger) are removed.
+        Delegates to the shared :func:`plan_route` semantics (missing stops are appended at the tail,
+        unused stops - e.g. left behind by a bumped passenger - are removed).
         """
-        q = self.stop_queue
-        used: Set[int] = set()
-
-        def first_index(floor: int, start: int) -> int:
-            for k in range(start, len(q)):
-                if q[k] == floor:
-                    return k
-            q.append(floor)
-            return len(q) - 1
-
+        floor = self.current_floor
         boarding_now = self.state == ElevatorState.DOOR_OPENING and not self.at_capacity_flag
-        for r in self.onboard_requests:
-            used.add(first_index(r.target_floor, 0))
-        for r in self.assigned_waiting_requests:
-            if boarding_now and r.src_floor == self.current_floor:
-                used.add(first_index(r.target_floor, 0))
-                continue
-            i = first_index(r.src_floor, 0)
-            used.add(i)
-            used.add(first_index(r.target_floor, i + 1))
-        self.stop_queue = [f for k, f in enumerate(q) if k in used]
+        self.stop_queue = plan_route(
+            self.stop_queue,
+            self.onboard_requests,
+            self.assigned_waiting_requests,
+            boarding_now=(lambda r: boarding_now and r.src_floor == floor),
+            append_missing_src=True,
+        ).route
