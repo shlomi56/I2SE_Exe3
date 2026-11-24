@@ -1,0 +1,5 @@
+# Smart Elevator Allocation System — Python 3.10+
+# Core simulator, dispatchers, request generator and the ESP32 TCP bridge use the stdlib only
+# (json, csv, socket, random, dataclasses, abc, typing).
+pytest>=7.4
+# GUI dependency will be added in Phase 5 once the framework is confirmed.

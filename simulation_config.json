@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "simulation": {
+    "name": "Office_Building_Morning_Rush",
+    "duration_sec": 3600.0,
+    "time_step_dt_sec": 0.1,
+    "random_seed": 42,
+    "realtime_scale": 0.0
+  },
+  "building": {
+    "min_floor": -2,
+    "max_floor": 15,
+    "lobby_floor": 0,
+    "floor_height_meters": 3.5
+  },
+  "elevators": [
+    {
+      "elevator_id": 0,
+      "initial_floor": 0,
+      "max_speed_floors_per_sec": 2.0,
+      "start_time_sec": 1.5,
+      "stop_time_sec": 1.5,
+      "door_open_time_sec": 2.0,
+      "door_close_time_sec": 2.0,
+      "dwell_time_sec": 3.0,
+      "max_capacity_passengers": 8,
+      "max_weight_kg": 640.0
+    },
+    {
+      "elevator_id": 1,
+      "initial_floor": 0,
+      "max_speed_floors_per_sec": 2.0,
+      "start_time_sec": 1.5,
+      "stop_time_sec": 1.5,
+      "door_open_time_sec": 2.0,
+      "door_close_time_sec": 2.0,
+      "dwell_time_sec": 3.0,
+      "max_capacity_passengers": 8,
+      "max_weight_kg": 640.0
+    },
+    {
+      "elevator_id": 2,
+      "initial_floor": 8,
+      "max_speed_floors_per_sec": 2.5,
+      "start_time_sec": 1.2,
+      "stop_time_sec": 1.2,
+      "door_open_time_sec": 2.0,
+      "door_close_time_sec": 2.0,
+      "dwell_time_sec": 3.0,
+      "max_capacity_passengers": 10,
+      "max_weight_kg": 800.0
+    }
+  ],
+  "passengers": {
+    "avg_weight_kg": 75.0,
+    "weight_std_kg": 15.0,
+    "min_weight_kg": 35.0,
+    "max_weight_kg": 140.0
+  },
+  "dispatcher": {
+    "algorithm": "MC_DDI",
+    "weight_buffer_ratio": 0.10,
+    "soft_max_wait_sec": 60.0,
+    "fairness_weight": 0.05,
+    "enable_idle_parking": true,
+    "idle_parking_timeout_sec": 30.0
+  },
+  "sensors": {
+    "max_vibration_threshold": 5.0,
+    "door_obstruction_probability": 0.03,
+    "door_obstruction_delay_sec": 4.0,
+    "injected_faults": [
+      {
+        "elevator_id": 1,
+        "type": "VIBRATION_FAULT",
+        "start_time_sec": 1200.0,
+        "end_time_sec": 1320.0,
+        "severity": 7.5
+      }
+    ]
+  },
+  "traffic_generator": {
+    "total_requests": 200,
+    "distribution": "POISSON",
+    "phases": [
+      {
+        "name": "morning_up_peak",
+        "start_time_sec": 0.0,
+        "end_time_sec": 1200.0,
+        "arrival_rate_per_min": 6.0,
+        "up_peak_ratio": 0.75,
+        "down_peak_ratio": 0.10,
+        "inter_floor_ratio": 0.15
+      },
+      {
+        "name": "midday_mixed",
+        "start_time_sec": 1200.0,
+        "end_time_sec": 2400.0,
+        "arrival_rate_per_min": 3.0,
+        "up_peak_ratio": 0.25,
+        "down_peak_ratio": 0.25,
+        "inter_floor_ratio": 0.50
+      },
+      {
+        "name": "evening_down_peak",
+        "start_time_sec": 2400.0,
+        "end_time_sec": 3600.0,
+        "arrival_rate_per_min": 5.0,
+        "up_peak_ratio": 0.10,
+        "down_peak_ratio": 0.75,
+        "inter_floor_ratio": 0.15
+      }
+    ]
+  },
+  "esp32_bridge": {
+    "enabled": false,
+    "transport": "WIFI_TCP",
+    "host": "192.168.1.105",
+    "port": 5000,
+    "ble_service_uuid": "4fafc201-1fb5-459e-8fcc-c5c9c331914b",
+    "timeout_ms": 500
+  }
+}

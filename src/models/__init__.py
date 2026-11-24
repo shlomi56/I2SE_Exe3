@@ -1,0 +1,41 @@
+"""Enums and DTOs shared by every layer (simulation, dispatchers, comms, GUI)."""
+from src.models.dto import (
+    AllocationDecision,
+    BuildingConfig,
+    DispatcherSettings,
+    ElevatorAssignment,
+    ElevatorConfig,
+    ESP32BridgeConfig,
+    InjectedFault,
+    PassengerWeightConfig,
+    Request,
+    SensorSettings,
+    SensorSnapshot,
+    SimulationSettings,
+    StopRecord,
+    TrafficPhase,
+    TrafficProfile,
+)
+from src.models.enums import Direction, ElevatorState, RequestStatus, TrafficType
+
+__all__ = [
+    "AllocationDecision",
+    "BuildingConfig",
+    "Direction",
+    "DispatcherSettings",
+    "ElevatorAssignment",
+    "ElevatorConfig",
+    "ElevatorState",
+    "ESP32BridgeConfig",
+    "InjectedFault",
+    "PassengerWeightConfig",
+    "Request",
+    "RequestStatus",
+    "SensorSettings",
+    "SensorSnapshot",
+    "SimulationSettings",
+    "StopRecord",
+    "TrafficPhase",
+    "TrafficProfile",
+    "TrafficType",
+]
